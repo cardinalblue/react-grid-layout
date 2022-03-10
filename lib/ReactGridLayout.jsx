@@ -15,7 +15,8 @@ import {
   moveElement,
   noop,
   synchronizeLayoutWithChildren,
-  withLayoutItem
+  withLayoutItem,
+  mergeLayouts
 } from "./utils";
 
 import { calcXY } from "./calculateUtils";
@@ -166,7 +167,9 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       // If children change, also regenerate the layout. Use our state
       // as the base in case because it may be more up to date than
       // what is in props.
-      newLayoutBase = prevState.layout;
+      // However, new LayoutItems will not be in the prevState, so we
+      // need to do a merge to get the new Layouts.
+      newLayoutBase = mergeLayouts(nextProps.layout, prevState.layout);
     }
 
     // We need to regenerate the layout.
